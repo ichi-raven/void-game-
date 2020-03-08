@@ -30,8 +30,6 @@ public:
 
 	void draw() const override;
 
-	void myShip_update();
-
 	void input_update();
 
 	void enemy_update();

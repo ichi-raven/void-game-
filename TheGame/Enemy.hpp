@@ -1,21 +1,21 @@
 #pragma once
 #include <Siv3D.hpp>
 
-struct  Enemy
+class Enemy
 {
-	Enemy()
-		: pos(Vec2(0, 0))
-		, vel(Vec2(0, 0))
-		, acc(Vec2(0, 0))
-		, tex(U"Assets/Enemy_1B.png")
-	{
+public:
 
-	}
+	Enemy();
 
-	double speed;
+	void update();
+
+	void draw() const;
+
 	Vec2 pos;
 	Vec2 vel;
 	Vec2 acc;
+	double angle;
+
 	Texture tex;
 
 };

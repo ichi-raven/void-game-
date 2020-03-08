@@ -3,15 +3,11 @@
 
 struct Bullet
 {
-	Bullet()
-		: pos(Vec2(0, 0))
-		, vel(Vec2(0, 0))
-		, acc(Vec2(0, 0))
-		, angle(0)
-		, tex(U"Assets/Bullet_RectangleB.png")
-	{
+	Bullet();
 
-	}
+	void update();
+
+	void draw() const;
 
 	Vec2 pos;
 	Vec2 vel;

@@ -36,3 +36,6 @@ Intermediate/*
 
 #.vs
 .vs/
+
+#Assets
+*.wav

@@ -16,14 +16,14 @@ void Game::init()
 	e.isExecuted = false;
 	events.emplace_back(e);
 
-	Profiler::EnableAssetCreationWarning(false);
+	Profiler::EnableAssetCreationWarning(false);//大量の弾を生成するときにちゅういするやつ
 }
 
 void Game::update()
 {
 	input_update();
-	myShip_update();
-	enemy_update();
+	myShip.update();
+	enemy.update();
 	BC_update();
 	time_update();
 	event_update();
@@ -32,11 +32,11 @@ void Game::update()
 void Game::draw() const
 {
 	//Print << music.posSec();
-	myShip.tex.drawAt(myShip.pos);
-	enemy.tex.drawAt(enemy.pos);
+	myShip.draw();
+	enemy.draw();
 
 	for (const auto& b : bc)
-		b.tex.rotated(b.angle + M_PI / 2).drawAt(b.pos);
+		b.draw();
 }
 
 void Game::time_update()
@@ -66,10 +66,6 @@ void Game::input_update()
 
 }
 
-void Game::myShip_update()
-{
-	myShip.pos += myShip.vel += myShip.acc;
-}
 
 void Game::enemy_update()
 {
@@ -118,9 +114,13 @@ void Game::BC_update()
 	//更新
 	for (auto& b : bc)
 	{
+		const double nextAngle = b.angle + M_PI / 72000;
+		const Vec2 prevVel = b.vel;
+
 		b.angle = atan(b.vel.y / b.vel.x);
-		//b.acc = Vec2(cos(b.angle + M_PI / 720), sin(b.angle + M_PI / 720));
-		b.pos += b.vel += b.acc;
+		b.vel.x = prevVel.x * cos(nextAngle) - prevVel.y * sin(nextAngle);
+		b.vel.y = prevVel.x * sin(nextAngle) + prevVel.y * cos(nextAngle);
+		b.update();
 	}
 
 	//削除
@@ -136,10 +136,6 @@ void Game::BC_update()
 			return false;
 		});
 	bc.erase(itr, bc.end());
-
-
-	//デバッグ表示
-	//s3d::Print << bc.size();
 }
 
 void Game::event_update()
