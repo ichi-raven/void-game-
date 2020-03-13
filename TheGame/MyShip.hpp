@@ -1,7 +1,8 @@
 #pragma once
 #include <Siv3D.hpp>
+#include "Object.hpp"
 
-class MyShip
+class MyShip : public Object
 {
 public:
 
@@ -11,9 +12,7 @@ public:
 
 	void draw() const;
 
-	Vec2 pos;
-	Vec2 vel;
-	Vec2 acc;
+private:
 	double angle;
 
 	Texture tex;

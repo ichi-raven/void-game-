@@ -51,5 +51,4 @@ private:
 
 	const Audio			music;
 	double				time;
-	double				prevTime;
 };

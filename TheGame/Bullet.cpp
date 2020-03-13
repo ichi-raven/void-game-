@@ -12,11 +12,10 @@ Bullet::Bullet()
 
 void Bullet::update()
 {
-	pos += vel += acc;
-	angle = atan(vel.y / vel.x);
+	Object::update();
 }
 
 void Bullet::draw() const
 {
-	tex.rotated(angle + M_PI / 2).drawAt(pos);
+	tex.rotated(angle).drawAt(pos);
 }

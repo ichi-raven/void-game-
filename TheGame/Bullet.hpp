@@ -1,7 +1,8 @@
 #pragma once
 #include <Siv3D.hpp>
+#include "Object.hpp"
 
-struct Bullet
+struct Bullet : public Object
 {
 	Bullet();
 
@@ -9,9 +10,8 @@ struct Bullet
 
 	void draw() const;
 
-	Vec2 pos;
-	Vec2 vel;
-	Vec2 acc;
+private:
+
 	double angle;
 
 	Texture tex;

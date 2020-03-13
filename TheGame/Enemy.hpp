@@ -1,7 +1,8 @@
 #pragma once
 #include <Siv3D.hpp>
+#include "Object.hpp"
 
-class Enemy
+class Enemy : public Object
 {
 public:
 
@@ -11,9 +12,10 @@ public:
 
 	void draw() const;
 
-	Vec2 pos;
-	Vec2 vel;
-	Vec2 acc;
+	double getAngle() const;
+
+private:
+
 	double angle;
 
 	Texture tex;

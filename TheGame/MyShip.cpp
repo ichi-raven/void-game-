@@ -12,11 +12,10 @@ MyShip::MyShip()
 
 void MyShip::update()
 {
-	pos += vel += acc;
-	angle = atan(vel.y / vel.x);
+	Object::update();
 }
 
 void MyShip::draw() const
 {
-	tex.rotated(angle + M_PI / 2).drawAt(pos);
+	tex.rotated(angle).drawAt(pos);
 }
