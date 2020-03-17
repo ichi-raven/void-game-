@@ -12,12 +12,7 @@ public:
 
 	void draw() const;
 
-	double getAngle() const;
-
 private:
 
-	double angle;
-
-	Texture tex;
-
+	Texture mTex;
 };

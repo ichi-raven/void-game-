@@ -19,8 +19,8 @@ public:
 	void update();
 
 protected:
-	Vec2	pos;
-	Vec2	vel;
-	Vec2	acc;
-	double angle;
+	Vec2	mPos;
+	Vec2	mVel;
+	Vec2	mAcc;
+	double	mAngle;
 };

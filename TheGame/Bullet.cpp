@@ -3,11 +3,16 @@
 
 Bullet::Bullet()
 {
-	pos = std::move(Vec2(0, 0));
-	vel = std::move(Vec2(0, 0));
-	acc = std::move(Vec2(0, 0));
-	angle = std::move(0);
-	tex = std::move(Texture(U"Assets/Bullet_RectangleB.png"));
+	mPos = std::move(Vec2(0, 0));
+	mVel = std::move(Vec2(0, 0));
+	mAcc = std::move(Vec2(0, 0));
+	mAngle = std::move(0);
+	mTex = std::move(Texture(U"Assets/Bullet_RectangleB.png"));
+}
+
+void Bullet::setTexture(const s3d::FilePath& path)
+{
+	mTex = std::move(Texture(path));
 }
 
 void Bullet::update()
@@ -17,5 +22,5 @@ void Bullet::update()
 
 void Bullet::draw() const
 {
-	tex.rotated(angle).drawAt(pos);
+	mTex.rotated(mAngle + M_PI / 2).drawAt(mPos);
 }

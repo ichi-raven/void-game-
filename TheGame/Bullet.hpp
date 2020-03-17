@@ -2,9 +2,13 @@
 #include <Siv3D.hpp>
 #include "Object.hpp"
 
-struct Bullet : public Object
+class Bullet : public Object
 {
+public:
+
 	Bullet();
+
+	void setTexture(const s3d::FilePath& path);
 
 	void update();
 
@@ -12,8 +16,6 @@ struct Bullet : public Object
 
 private:
 
-	double angle;
-
-	Texture tex;
+	Texture mTex;
 
 };

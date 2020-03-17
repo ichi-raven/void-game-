@@ -13,39 +13,7 @@ public:
 	void draw() const;
 
 private:
-	double angle;
 
-	Texture tex;
+	Texture mTex;
 };
 
-
-
-//inline void setPos(const Vec2& _pos)
-//{
-//	pos = _pos;
-//}
-
-//inline Vec2 getPos()
-//{
-//	return pos;
-//}
-
-//inline void setVel(const Vec2& _vel)
-//{
-//	vel = _vel;
-//}
-
-//inline Vec2 getVel()
-//{
-//	return vel;
-//}
-
-//inline void setAcc(const Vec2& _acc)
-//{
-//	acc = _acc;
-//}
-
-//inline Vec2 getAcc()
-//{
-//	return acc;
-//}

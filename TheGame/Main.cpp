@@ -22,7 +22,6 @@ void Main()
 	{
 		if (!app.update())
 			break;
-
 	}
 }
 

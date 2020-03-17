@@ -2,44 +2,51 @@
 #include "CommonConstant.hpp"
 
 
-void Object::setPos(const Vec2& _pos)
+void Object::setPos(const Vec2& pos)
 {
-	pos = _pos;
+	mPos = pos;
 }
 
 Vec2 Object::getPos() const
 {
-	return pos;
+	return mPos;
 }
 
-void Object::setVel(const Vec2& _vel)
+void Object::setVel(const Vec2& vel)
 {
-	vel = _vel;
+	mVel = vel;
 }
 
 Vec2 Object::getVel() const
 {
-	return vel;
+	return mVel;
 }
 
-void Object::setAcc(const Vec2& _acc)
+void Object::setAcc(const Vec2& acc)
 {
-	acc = _acc;
+	mAcc = acc;
 }
 
 Vec2 Object::getAcc() const
 {
-	return acc;
+	return mAcc;
 }
 
 double Object::getAngle() const
 {
-	return angle;
+	return mAngle;
 }
 
 void Object::update()
 {
-	pos += vel += acc;
-	angle = atan(vel.y / vel.x);
+	mPos += mVel += mAcc; 
+
+	if (mVel.x == 0)
+	{
+		mAngle = mVel.y >= 0 ? M_PI / 2 : -M_PI / 2;
+		return;
+	}
+
+	mAngle = atan(mVel.y / mVel.x);
 }
 

@@ -9,6 +9,11 @@
 #include "Bullet.hpp"
 #include "Event.hpp"
 
+#include <vector>
+#include <queue>
+
+using BC = std::unordered_map<int, std::vector<Bullet>>;
+
 class Game : public SceneManager<String, GameParam>::Scene
 {
 public:
@@ -19,36 +24,35 @@ public:
 		, enemy()
 		, time(0)
 		, windowSize(Vec2(getData().windowWidth, getData().windowHeight))
-		, music(U"Assets/Œ¶‘zò—Ú—.wav")
+		, music(U"Assets/Lo-fiì2.wav")
 	{
 		init();
 	}
 
 	void init();
 
+	void BCSetup();
+
+	void eventSetup();
+
+	void eventHandle();
+
+	void input();//“ü—Í‚ÉŠÖ‚·‚éˆ—‚Í‚±‚±
+
 	void update() override;
 
 	void draw() const override;
 
-	void input_update();
-
-	void enemy_update();
-
-	void BC_update();
-
-	void time_update();
-
-	void event_update();
 
 private:
-	const Vec2			windowSize;
 
+	const Vec2			windowSize;
 	const Font			font;
 	MyShip				myShip;
 	Enemy				enemy;
-	std::vector<Bullet> bc;
-	std::vector<Event>  events;
-
+	BC					bc;
+	std::vector<Event>  activeEvents;
+	std::queue<Event>	waitingEvents;
 	const Audio			music;
 	double				time;
 };
