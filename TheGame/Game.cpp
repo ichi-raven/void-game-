@@ -8,6 +8,7 @@ void Game::init()
 
 	Profiler::EnableAssetCreationWarning(false);//‘å—Ê‚Ì’e‚ğ¶¬‚·‚é‚Æ‚«‚É‚¿‚ã‚¤‚¢‚·‚é‚â‚Â
 	enemy.setPos(Vec2(windowSize.x / 2, windowSize.y / 3));
+	myShip.setPos(Vec2(windowSize.x / 2, windowSize.y / 5 * 4));
 	music.play();
 	music.setVolume(0.1);
 }
@@ -17,6 +18,8 @@ void Game::update()
 	input();
 
 	eventHandle();
+
+	Print << music.posSec();
 
 	myShip.update();
 	enemy.update();
@@ -34,7 +37,6 @@ void Game::draw() const
 		for (const auto& b : bVecPair.second)
 			b.draw();
 }
-
 
 void Game::input()
 {
@@ -69,7 +71,7 @@ void Game::eventHandle()
 	while (
 			!waitingEvents.empty() 
 			&& 
-			music.posSec() - waitingEvents.back().getTriggerTime() <= allowableErrorTime
+			waitingEvents.back().getTriggerTime() - music.posSec() <= allowableErrorTime
 		  )
 	{
 		activeEvents.emplace_back(waitingEvents.back());
@@ -88,5 +90,6 @@ void Game::eventHandle()
 			}
 			return false;
 		});
+
 	activeEvents.erase(itr, activeEvents.end());
 }

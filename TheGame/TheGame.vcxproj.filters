@@ -120,7 +120,7 @@
     <ClCompile Include="Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game_Setup.cpp">
+    <ClCompile Include="Game_EventSetup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

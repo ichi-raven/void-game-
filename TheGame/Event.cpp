@@ -1,5 +1,22 @@
 #include "Event.hpp"
 
+Event::Event
+(
+	const double triggerTime,
+	EventType type,
+	const std::function<void(Event * pE)>& startFunc,
+	const std::function<void(Event * pE)>& updateFunc,
+	const std::function<void(Event * pE)>& endFunc
+)
+{
+	mTriggerTime = triggerTime;
+	mType = type;
+	mStartFunc = startFunc;
+	mUpdateFunc = updateFunc;
+	mEndFunc = endFunc;
+	mEndFlag = false;
+}
+
 void Event::setTriggerTime(const double& triggerTime)
 {
 	mTriggerTime = triggerTime;
@@ -28,6 +45,7 @@ void Event::setUpdateFunc(const std::function<void(Event * pE)>& updateFunc)
 void Event::executeUpdateFunc()
 {
 	mUpdateFunc(this);
+	++mElapsedFrame;
 }
 
 void Event::setEndFunc(const std::function<void(Event * pE)>& endFunc)
@@ -59,4 +77,9 @@ void Event::setEndFlag(bool endFlag)
 bool Event::getEndFlag() const
 {
 	return mEndFlag;
+}
+
+uint64_t Event::getElapsedFrame() const
+{
+	return mElapsedFrame;
 }

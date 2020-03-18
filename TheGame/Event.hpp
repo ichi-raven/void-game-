@@ -11,17 +11,27 @@ enum class EventType
 class Event
 {
 public:
+
 	Event()
 		: mTriggerTime(0)
 		, mStartFunc([](Event*) {})
 		, mUpdateFunc([](Event*) {})
 		, mEndFunc([](Event*) {})
-		, mElapsedTime(0)
+		, mElapsedFrame(0)
 		, mType(EventType::eOnce)
 		, mEndFlag(false)
 	{
 
 	}
+
+	Event
+	(
+		const double triggerTime,
+		EventType type,
+		const std::function<void(Event * pE)>& startFunc,
+		const std::function<void(Event * pE)>& updateFunc,
+		const std::function<void(Event * pE)>& endFunc
+	);
 
 	void setTriggerTime(const double& triggerTime);
 
@@ -31,11 +41,11 @@ public:
 
 	void executeStartFunc();
 
-	void setUpdateFunc(const std::function<void(Event * pE)>& updateFunc);
+	void setUpdateFunc(const std::function<void(Event* pE)>& updateFunc);
 
 	void executeUpdateFunc();
 
-	void setEndFunc(const std::function<void(Event * pE)>& endFunc);
+	void setEndFunc(const std::function<void(Event* pE)>& endFunc);
 
 	void executeEndFunc();
 
@@ -47,11 +57,12 @@ public:
 
 	EventType getType() const;
 
-
+	uint64_t getElapsedFrame() const;
 
 private:
+
 	double							mTriggerTime;
-	uint64_t						mElapsedTime;
+	uint64_t						mElapsedFrame;
 	std::function<void(Event* pE)>	mStartFunc;
 	std::function<void(Event* pE)>	mUpdateFunc;
 	std::function<void(Event* pE)>	mEndFunc;

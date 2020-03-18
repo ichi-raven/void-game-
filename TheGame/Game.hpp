@@ -31,9 +31,11 @@ public:
 
 	void init();
 
+	//-----------------
+	//主に登録が目的のため別ソースファイルにあります
 	void BCSetup();
-
 	void eventSetup();
+	//-----------------
 
 	void eventHandle();
 

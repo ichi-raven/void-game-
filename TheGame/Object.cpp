@@ -39,7 +39,7 @@ double Object::getAngle() const
 
 void Object::update()
 {
-	mPos += mVel += mAcc; 
+	mPos += mVel += mAcc;
 
 	if (mVel.x == 0)
 	{
