@@ -30,21 +30,10 @@ include_directories(
 	${XFT_INCLUDE_DIRS}
 )
 
-set(SOURCE_FILES
-	"src/Main.cpp"
-	"src/Bullet.cpp"
-	"src/Enemy.cpp"
-	"src/Event.cpp"
-	"src/Game.cpp"
-	"src/Game_EventSetup.cpp"
-	"src/MyShip.cpp"
-	"src/Object.cpp"
-	"src/Title.cpp"
-)
+FILE(GLOB SOURCES src/*.cpp)
+add_executable(App ${SOURCES})
 
-add_executable(Siv3D_App ${SOURCE_FILES})
-
-target_link_libraries(Siv3D_App
+target_link_libraries(App
 	${OPENCV4_LIBRARIES}
 	${XFT_LIBRARIES}
 	-lOpenGL

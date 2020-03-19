@@ -49,3 +49,7 @@ nlp/*
 CMakeCache.txt
 CMakeFiles/*
 cmake_install.cmake
+Makefile.txt
+
+#My executable
+App
