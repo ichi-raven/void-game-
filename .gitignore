@@ -31,6 +31,8 @@
 *.out
 *.app
 
+#-------------------------------
+
 #Intermediate
 Intermediate/*
 
@@ -39,3 +41,11 @@ Intermediate/*
 
 #Assets
 *.wav
+example/*
+resources/*
+nlp/*
+
+#CMake
+CMakeCache.txt
+CMakeFiles/*
+cmake_install.cmake
