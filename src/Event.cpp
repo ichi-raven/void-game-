@@ -69,9 +69,9 @@ EventType Event::getType() const
 	return mType;
 }
 
-void Event::setEndFlag(bool endFlag)
+void Event::setEndFlag()
 {
-	mEndFlag = endFlag;
+	mEndFlag = !mEndFlag;
 }
 
 bool Event::getEndFlag() const

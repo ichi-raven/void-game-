@@ -12,6 +12,8 @@ public:
 
 	void draw() const;
 
+	void setTexture(Texture tex);
+
 private:
 
 	Texture mTex;

@@ -8,7 +8,13 @@ public:
 
 	Bullet();
 
-	void setTexture(const s3d::FilePath& path);
+	void setTexture(const Texture& tex);
+
+	void setScale(const Vec2& scale);
+
+	void setState(const uint8_t state);
+
+	uint8_t getState() const;
 
 	void update();
 
@@ -17,5 +23,6 @@ public:
 private:
 
 	Texture mTex;
-
+	Vec2 mScale;
+	uint8_t mState;
 };

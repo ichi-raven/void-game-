@@ -4,11 +4,13 @@
 
 Enemy::Enemy()
 {
-	mPos = std::move(Vec2(0, 0));
-	mVel = std::move(Vec2(0, 0));
-	mAcc = std::move(Vec2(0, 0));
-	mAngle = std::move(0);
-	mTex = std::move(Texture(U"resources/Assets/Enemy_2B.png"));
+
+	mPos = Vec2(0, 0);
+	mVel = Vec2(0, 0);
+	mAcc = Vec2(0, 0);
+	mAngle = 0;
+	mTex = Texture(U"resources/Assets/Enemy_2B.png");
+
 }
 
 void Enemy::update()
@@ -19,4 +21,9 @@ void Enemy::update()
 void Enemy::draw() const
 {
 	mTex.drawAt(mPos);
+}
+
+void Enemy::setTexture(Texture tex)
+{
+	mTex = tex;
 }

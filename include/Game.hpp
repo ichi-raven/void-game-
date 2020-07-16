@@ -32,14 +32,16 @@ public:
 	void init();
 
 	//-----------------
-	//��ɓo�^���ړI�̂��ߕʃ\�[�X�t�@�C���ɂ���܂�
+	
 	void BCSetup();
 	void eventSetup();
 	//-----------------
 
 	void eventHandle();
 
-	void input();//���͂Ɋւ��鏈���͂���
+	void input();
+
+	void checkCollide();
 
 	void update() override;
 
@@ -57,4 +59,5 @@ private:
 	std::queue<Event>	waitingEvents;
 	const Audio			music;
 	double				time;
+	Timer				hitTimer;
 };

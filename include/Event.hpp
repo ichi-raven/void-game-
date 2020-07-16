@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <cstdint>
 
 enum class EventType
 {
@@ -49,7 +50,7 @@ public:
 
 	void executeEndFunc();
 
-	void setEndFlag(bool endFlag);
+	void setEndFlag();
 
 	bool getEndFlag() const;
 
@@ -59,8 +60,8 @@ public:
 
 	uint64_t getElapsedFrame() const;
 
-private:
 
+private:
 	double							mTriggerTime;
 	uint64_t						mElapsedFrame;
 	std::function<void(Event* pE)>	mStartFunc;

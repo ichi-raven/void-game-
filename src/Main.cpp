@@ -15,14 +15,15 @@ void Main()
 	app.add<Title>(U"Title");
 	app.add<Game>(U"Game");
 
+	//Window::Resize(Size(1280, 960));
+
 	app.get()->windowWidth  = Window::ClientWidth();
 	app.get()->windowHeight = Window::ClientHeight();
 
 	while (System::Update())
-	{
 		if (!app.update())
 			break;
-	}
+
 }
 
 //
