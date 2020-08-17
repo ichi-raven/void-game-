@@ -16,7 +16,7 @@ void Game::init()
 
 void Game::update()
 {
-	input();
+	checkInput();
 
 	eventHandle();
 
@@ -39,7 +39,7 @@ void Game::draw() const
 			b.draw();
 }
 
-void Game::input()
+void Game::checkInput()
 {
 	{
 		const uint16_t speed = KeyShift.pressed() ? 3 : 7;

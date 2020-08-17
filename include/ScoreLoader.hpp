@@ -1,17 +1,18 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <optional>
+
+using Note = std::pair<int, double>;
 
 class ScoreLoader
 {
 public:
-    using Note = std::pair<std::string, double>;
-
     ScoreLoader();
     ~ScoreLoader();
     bool load(const char *fileName);
 
-    Note getNote();
+    std::optional<Note> getNote();
 
 private:
     std::vector<Note> score;

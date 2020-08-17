@@ -31,22 +31,21 @@ public:
 
 	void init();
 
+	//別ファイル
 	//-----------------
-	
 	void BCSetup();
 	void eventSetup();
 	//-----------------
 
 	void eventHandle();
 
-	void input();
+	void checkInput();
 
 	void checkCollide();
 
 	void update() override;
 
 	void draw() const override;
-
 
 private:
 

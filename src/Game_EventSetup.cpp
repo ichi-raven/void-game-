@@ -1,14 +1,14 @@
 #include "Game.hpp"
 #include "CommonConstant.hpp"
 
-enum BulletsName
+enum BulletsName//ここでキーを登録
 {
 	eOP,
 	eLine,
 	eCircle,
 };
 
-void Game::BCSetup()
+void Game::BCSetup()//vector構築
 {
 	bc.emplace(eOP, std::vector<Bullet>());
 	bc.emplace(eLine, std::vector<Bullet>());
@@ -35,7 +35,8 @@ void Game::eventSetup()
 
 		auto &op = bc[eOP];
 
-		auto lmdStart = [&](Event *pE) {
+		auto lmdStart = [&](Event *pE) 
+		{
 			for (int i = 0; i < OPNumOnce; ++i)
 			{
 				op.emplace_back();
@@ -65,7 +66,8 @@ void Game::eventSetup()
 			}
 		};
 
-		auto lmdEnd = [&](Event *pE) {
+		auto lmdEnd = [&](Event *pE) 
+		{
 			op.clear();
 		};
 
