@@ -29,9 +29,9 @@ public:
 	(
 		const double triggerTime,
 		EventType type,
-		const std::function<void(Event * pE)>& startFunc,
-		const std::function<void(Event * pE)>& updateFunc,
-		const std::function<void(Event * pE)>& endFunc
+		const std::function<void(Event *pE)>& startFunc,
+		const std::function<void(Event *pE)>& updateFunc,
+		const std::function<void(Event *pE)>& endFunc
 	);
 
 	void setTriggerTime(const double& triggerTime);

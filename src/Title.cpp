@@ -10,6 +10,6 @@ void Title::draw() const
 {
 	Vec2 pos(getData().windowWidth / 2, getData().windowHeight / 2);
 
-	font(U"void Game(const Game& game);\nPRESS ENTER").drawAt(pos);
+	font(U"PRESS ENTER").drawAt(pos);
 
 }

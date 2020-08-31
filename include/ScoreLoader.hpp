@@ -12,7 +12,7 @@ public:
     ~ScoreLoader();
     bool load(const char *fileName);
 
-    std::optional<Note> getNote();
+    const std::vector<Note>&  getNotes() const;
 
 private:
     std::vector<Note> score;

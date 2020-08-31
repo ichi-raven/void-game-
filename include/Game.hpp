@@ -8,6 +8,7 @@
 #include "Enemy.hpp"
 #include "Bullet.hpp"
 #include "Event.hpp"
+#include "ScoreLoader.hpp"
 
 #include <vector>
 #include <queue>
@@ -24,7 +25,7 @@ public:
 		, enemy()
 		, time(0)
 		, windowSize(Vec2(getData().windowWidth, getData().windowHeight))
-		, music(U"resources/Assets/Lo-fi2.wav")
+		, music(U"resources/Music/music.wav")//テスト音源
 	{
 		init();
 	}
@@ -59,4 +60,6 @@ private:
 	const Audio			music;
 	double				time;
 	Timer				hitTimer;
+	ScoreLoader 		scoreLoader;
+	std::vector<Note> notes;
 };

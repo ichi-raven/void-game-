@@ -1,17 +1,22 @@
 #include "Game.hpp"
 #include "CommonConstant.hpp"
 
+#include <cassert>
+
 void Game::init()
 {
-	BCSetup();
-	eventSetup();
-
 	Profiler::EnableAssetCreationWarning(false);
 	enemy.setPos(Vec2(windowSize.x / 2, windowSize.y / 3));
 	myShip.setPos(Vec2(windowSize.x / 2, windowSize.y / 5 * 4));
 	music.play();
-	music.setVolume(0);//------------------------
+	music.setVolume(0.2); //------------------------
 
+	assert(scoreLoader.load("resources/Score/score.dat"));
+
+	notes = scoreLoader.getNotes();
+
+	BCSetup();
+	eventSetup();
 }
 
 void Game::update()
@@ -24,6 +29,12 @@ void Game::update()
 
 	myShip.update();
 	enemy.update();
+
+	for(auto& bVecPair : bc)
+		for(auto& b : bVecPair.second)
+		{
+			b.update();
+		}
 
 	for (auto& ae : activeEvents)
 		ae.executeUpdateFunc();
@@ -69,13 +80,14 @@ void Game::checkInput()
 void Game::eventHandle()
 {
 	while (
-			!waitingEvents.empty() 
+			!notes.empty() 
 			&& 
-			waitingEvents.front().getTriggerTime() - music.posSec() <= allowableErrorTime
+			notes.back().second - music.posSec() <= allowableErrorTime
 		  )
 	{
+		Print << notes.back().second;
 		activeEvents.push_back(waitingEvents.front());
-		waitingEvents.pop();
+		notes.pop_back();
 		activeEvents.back().executeStartFunc();
 	}
 

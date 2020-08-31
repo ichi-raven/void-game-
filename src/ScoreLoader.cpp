@@ -1,6 +1,10 @@
 #include <ScoreLoader.hpp>
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <algorithm>
+
+#include <Siv3D.hpp>
 
 ScoreLoader::ScoreLoader()
 {
@@ -23,24 +27,39 @@ bool ScoreLoader::load(const char* fileName)
     }
 
     std::ifstream ifs(fileName);
-    if(ifs)
+    if(!ifs)
     {
         std::cerr << "failed to open file\n";
         return false;
     }
 
     Note note;
-    while(ifs >> note.first >> note.second)
+    std::string str;
+    while (std::getline(ifs, str))
     {
+        std::istringstream iss(str);
+        if(!iss)
+            continue;
+        iss >> note.first >> note.second;
         score.emplace_back(note);
     }
 
+    std::reverse(score.begin(), score.end());
     ifs.close();
+
+    std::ofstream ofs("test.txt");
+
+    for(auto& n : score)
+    {
+        ofs << n.first << " " << n.second << "\n";
+    }
+
+    ofs.close();
+
+    return true;
 }
 
-std::optional<Note> ScoreLoader::getNote()
+const std::vector<Note>& ScoreLoader::getNotes() const 
 {
-    Note rtn = score.back();
-    score.pop_back();
-    return rtn;
+    return score;
 }

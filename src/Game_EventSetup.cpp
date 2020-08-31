@@ -1,21 +1,14 @@
 #include "Game.hpp"
 #include "CommonConstant.hpp"
 
-enum BulletsName//ここでキーを登録
+enum BulletsName
 {
 	eOP,
-	eLine,
-	eCircle,
 };
 
-void Game::BCSetup()//vector構築
+void Game::BCSetup()
 {
 	bc.emplace(eOP, std::vector<Bullet>());
-	bc.emplace(eLine, std::vector<Bullet>());
-	bc.emplace(eCircle, std::vector<Bullet>());
-
-	for (auto &bVecPair : bc) //実行環境によって調整するといいかもしれない
-		bVecPair.second.reserve(500);
 }
 
 void Game::eventSetup()
@@ -25,45 +18,41 @@ void Game::eventSetup()
 		return Vec2(v.x * cos(angle) - v.y * sin(angle),
 					v.x * sin(angle) + v.y * cos(angle));
 	};
-
-	//本ステージでの弾幕における全体的な定数
-	constexpr int OPNumOnce = 10;
-
 	{
-		constexpr double radius = 100;
-		constexpr double speed = 10;
+		constexpr int OPNumOnce = 20;
+		constexpr double radius = 200;
+		constexpr double speed = 3;
 
 		auto &op = bc[eOP];
 
-		auto lmdStart = [&](Event *pE) 
-		{
+		auto lmdStart = [&](Event *pE) {
+			const int rand = Random<int>(5);
 			for (int i = 0; i < OPNumOnce; ++i)
 			{
 				op.emplace_back();
-				op.back().setTexture(Texture(U"resources/Assets/Bullet_CircleW.png"));
-				op.back().setScale(Vec2(1.7, 1.7));
-				const double angle = 2 * M_PI / OPNumOnce * i;
-				op.back().setPos(enemy.getPos() + Vec2(cos(angle), sin(angle)) * 100);
-				op.back().setVel(Vec2(cos(angle - M_PI / 60), sin(angle- M_PI / 60)) * speed);
-				op.back().setAcc(Vec2(-cos(angle - M_PI / 60), -sin(angle - M_PI / 60)) * speed * 0.05);
+				op.back().setTexture(Texture(U"resources/Assets/Bullet_RectangleW.png"));
+				//op.back().setScale(Vec2(1.7, 1.7));
+				const double angle = 2 * M_PI / OPNumOnce * i + 90 / M_PI * rand;
+				op.back().setPos(enemy.getPos() + Vec2(cos(angle), sin(angle)) * radius);
+				op.back().setVel(Vec2(cos(angle), sin(angle)) * speed);
+				//op.back().setAcc(op.back().getVel() * 0.02);
 			}
 		};
 
 		auto lmdUpdate = [&](Event *pE) 
 		{
-			
-			for (int i = 0; i < op.size(); ++i)
+			const auto lmdErase = [&](const Bullet &b) 
 			{
-				op[i].setVel(lmdSpinVec2(op[i].getVel(), M_PI / 360));
+				const Vec2 &pos = b.getPos();
+				return pos.x < -100 ||
+					   pos.x > windowSize.x + 100 ||
+					   pos.y < -200 ||
+					   pos.y > windowSize.y + 100;
+			};
+			op.erase(std::remove_if(op.begin(), op.end(), lmdErase), op.end());
 
-				const double angle = 2 * M_PI / OPNumOnce * i;
-
-				//if(op[i].getPos().distanceFrom(enemy.getPos()) <= radius)
-				if(op[i].getVel().length() >= speed)
-					op[i].setVel(Vec2(cos(angle), sin(angle)) * speed);
-
-				op[i].update();
-			}
+			if(op.size() <= 0)
+				pE->setEndFlag();
 		};
 
 		auto lmdEnd = [&](Event *pE) 
@@ -71,121 +60,79 @@ void Game::eventSetup()
 			op.clear();
 		};
 
+
 		Event e(0, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
 		waitingEvents.push(e);
-	}
-	//------------------------------------------------------------------------
-	{
-		constexpr double speed = 6;
-
-		auto &line = bc[eLine];
-		auto &op = bc[eOP];
-
-		auto lmdStart = [&](Event *pE) 
-		{
-			for (size_t i = 0; i < op.size(); ++i)
-			{
-				line.emplace_back();
-				line.back().setTexture(Texture(U"resources/Assets/Bullet_RectangleB.png"));
-				//line.back().setScale(Vec2(1.7, 1.7));
-				//const double angle = 2 * M_PI / OPNumOnce * i + M_PI / 2;
-				line.back().setPos(op[i].getPos());
-				//line.back().setVel(line.back().getPos() - enemy.getPos().normalize() * speed);
-				//op.back.setAcc(op.back().getVel() * 0.02);
-			}
-		};
-
-		auto lmdUpdate = [&](Event *pE)
-		{
-			if (pE->getElapsedFrame() % 3 == 0)
-				for (int i = 0; i < OPNumOnce; ++i)
-				{
-					line.emplace_back();
-					line.back().setTexture(Texture(U"resources/Assets/Bullet_RectangleB.png"));
-					line.back().setPos(op[i].getPos());
-					//line.back().setVel((myShip.getPos() - line.back().getPos()).normalize() * speed);
-					line.back().setVel((line.back().getPos() - enemy.getPos()).normalize() * speed);
-					//op.back.setAcc(op.back().getVel() * 0.02);
-				}
-
-			for (auto &l : line)
-			{
-				l.update();
-
-				//Print << line.size() << U"\n";
-			}
-
-			auto lmdErase = [&](const Bullet &b) {
-				const Vec2 &pos = b.getPos();
-				return pos.x < -100 ||
-					   pos.x > windowSize.x + 100 ||
-					   pos.y < -200 ||
-					   pos.y > windowSize.y + 100;
-			};
-			{
-				auto itr = std::remove_if(line.begin(), line.end(), lmdErase);
-				line.erase(itr, line.end());
-			}
-		};
-
-		auto lmdEnd = [&](Event *pE) {
-			line.clear();
-		};
-
-		Event e(1, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
-		waitingEvents.push(e);
+		
 	}
 
-	//------------------------------------------------------------------------
-	{
-		constexpr int shotNumOnce = 6;
-		constexpr double speed = 5;
+	// {
+	// 	constexpr int per = 4;
 
-		auto &circle = bc[eCircle];
-		auto &op = bc[eOP];
+	// 	auto &line = bc[eB1];
+	// 	auto &line2 = bc[eB2];
 
-		auto lmdStart = [&](Event *pE) {
+	// 	auto lmdStart = [&](Event *pE) {
+	// 		line.reserve(500);
+	// 		line2.reserve(500);
+	// 	};
 
-		};
+	// 	auto lmdUpdate = [&](Event *pE) {
+	// 		const auto f = pE->getElapsedFrame();
+	// 		if (!(f % per))
+	// 			for (int i = 0; i < bc[eOP].size(); ++i)
+	// 			{
+	// 				line.emplace_back();
+	// 				auto &b = line.back();
+	// 				const auto &op = bc[eOP][i];
+	// 				b.setPos(op.getPos());
+	// 				//b.setVel(lmdSpinVec2((enemy.getPos() - op.getPos()) * 0.02, M_PI / 180 * f));
+	// 				b.setAcc(lmdSpinVec2((enemy.getPos() - op.getPos()).normalize() * 2, M_PI / 180 * f) * 0.012);
 
-		auto lmdUpdate = [&](Event *pE) {
-			if (pE->getElapsedFrame() % 20000000 == 0)
-				for (int i = 0; i < OPNumOnce; ++i)
-					for (int j = 0; j < shotNumOnce; ++j)
-					{
-						circle.emplace_back();
-						circle.back().setTexture(Texture(U"resources/Assets/Bullet_RectangleB.png"));
-						const double angle = 2 * M_PI / shotNumOnce * j;
-						circle.back().setPos(op[i].getPos());
-						circle.back().setVel(Vec2(cos(angle), sin(angle)) * speed);
-						//circle.back().setAcc(lmdSpinVec2(circle.back().getVel() * 0.01, M_PI / 360));
-					}
+	// 				line2.emplace_back();
+	// 				auto &b2 = line2.back();
+	// 				b2.setTexture(Texture(U"resources/Assets/Bullet_RectangleW.png"));
+	// 				b2.setPos(op.getPos());
+	// 				b2.setVel((enemy.getPos() - op.getPos()).normalize() * 3);
+	// 			}
 
-			for (auto &c : circle)
-			{
-				//c.setVel(lmdSpinVec2(c.getVel(), M_PI / 360));
-				c.update();
-			}
+	// 		for (auto &b : line)
+	// 		{
+	// 			//b.setVel(lmdSpinVec2(b.getVel(), -M_PI / 720));
+	// 			//b.setAcc(b.getVel() * -0.0025);
+	// 			b.update();
+	// 		}
 
-			auto lmdErase = [&](const Bullet &b) {
-				const Vec2 &pos = b.getPos();
-				return pos.x < -100 ||
-					   pos.x > windowSize.x + 100 ||
-					   pos.y < -200 ||
-					   pos.y > windowSize.y + 100;
-			};
-			circle.erase(std::remove_if(circle.begin(), circle.end(), lmdErase), circle.end());
+	// 		for (auto &b : line2)
+	// 		{
+	// 			//b.setVel(lmdSpinVec2(b.getVel(), -M_PI / 720));
+	// 			//b.setAcc(b.getVel() * -0.0025);
+	// 			b.update();
+	// 		}
 
-			//if(circle.size() == 0)
-			//pE->setEndFlag();
-		};
+	// 		auto lmdErase = [&](const Bullet &b) {
+	// 			const Vec2 &pos = b.getPos();
+	// 			return pos.x < -100 ||
+	// 				   pos.x > windowSize.x + 100 ||
+	// 				   pos.y < -200 ||
+	// 				   pos.y > windowSize.y + 100;
+	// 		};
 
-		auto lmdEnd = [&](Event *pE) {
-			circle.clear();
-		};
+	// 		{
+	// 			auto itr = std::remove_if(line.begin(), line.end(), lmdErase);
+	// 			line.erase(itr, line.end());
+	// 			auto itr2 = std::remove_if(line2.begin(), line2.end(), lmdErase);
+	// 			line2.erase(itr2, line2.end());
+	// 		}
+	// 	};
 
-		Event e(1, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
-		waitingEvents.push(e);
-	}
+	// 	auto lmdEnd = [&](Event *pE) 
+	// 	{
+	// 		line.clear();
+	// 		line2.clear();
+	// 	};
+
+	// 	Event e(1.5, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
+	// 	waitingEvents.push(e);
+	// }
 }
-
