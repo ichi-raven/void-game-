@@ -1,20 +1,20 @@
 #include "Event.hpp"
+#include "EventBehav.hpp"
 
-Event::Event
-(
-	const double triggerTime,
-	EventType type,
-	const std::function<void(Event * pE)>& startFunc,
-	const std::function<void(Event * pE)>& updateFunc,
-	const std::function<void(Event * pE)>& endFunc
-)
+#include <Siv3D.hpp>
+
+// Event::Event(const double &triggerTime, const EventBehav *const pBehav)
+// {
+// 	mTriggerTime = triggerTime;
+// 	mElapsedTime = 0;
+// 	mEndFlag = false;
+// 	mBehav = std::unique_ptr<EventBehav>(pBehav);
+// }
+
+Event::~Event()
 {
-	mTriggerTime = triggerTime;
-	mType = type;
-	mStartFunc = startFunc;
-	mUpdateFunc = updateFunc;
-	mEndFunc = endFunc;
-	mEndFlag = false;
+	//if(mBehav)
+	//	delete mBehav;
 }
 
 void Event::setTriggerTime(const double& triggerTime)
@@ -22,64 +22,46 @@ void Event::setTriggerTime(const double& triggerTime)
 	mTriggerTime = triggerTime;
 }
 
-double Event::getTriggerTime() const
+const double& Event::getTriggerTime() const
 {
 	return mTriggerTime;
 }
 
-void Event::setStartFunc(const std::function<void(Event * pE)>& startFunc)
+void Event::setBehav(Enemy &enemy, MyShip &myShip, const Vec2& windowSize, std::shared_ptr<EventBehav> pBehav)//Behavオブジェクトは動的に生成すること
 {
-	mStartFunc = startFunc;
+	if (!pBehav)
+		return;
+	if (mBehav)
+		mBehav.reset();
+
+	mBehav = pBehav;
+	mBehav->init(enemy, myShip, windowSize);
 }
 
-void Event::executeStartFunc()
+void Event::update(Enemy &enemy, MyShip &myShip, const double &elapsedTime)
 {
-	mStartFunc(this);
+	if(!mBehav)
+		return;
+	mBehav->update(enemy, myShip, elapsedTime);
+
+	mEndFlag = mBehav->end();
 }
 
-void Event::setUpdateFunc(const std::function<void(Event * pE)>& updateFunc)
+void Event::draw() const
 {
-	mUpdateFunc = updateFunc;
+	if (!mBehav)
+		return;
+	mBehav->draw();
 }
 
-void Event::executeUpdateFunc()
+bool Event::checkHit(MyShip& myShip)
 {
-	mUpdateFunc(this);
-	++mElapsedFrame;
+	if (!mBehav)
+		return false;
+	return mBehav->checkHit(myShip);
 }
 
-void Event::setEndFunc(const std::function<void(Event * pE)>& endFunc)
+bool Event::isEnded() const
 {
-	mEndFunc = endFunc;
-}
-
-void Event::executeEndFunc()
-{
-	mEndFunc(this);
-}
-
-
-void Event::setType(EventType type)
-{
-	mType = type;
-}
-
-EventType Event::getType() const
-{
-	return mType;
-}
-
-void Event::setEndFlag()
-{
-	mEndFlag = !mEndFlag;
-}
-
-bool Event::getEndFlag() const
-{
-	return mEndFlag;
-}
-
-uint64_t Event::getElapsedFrame() const
-{
-	return mElapsedFrame;
+	return mBehav->end();
 }

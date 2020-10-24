@@ -1,72 +1,48 @@
 #pragma once
 
-#include <functional>
+//#include <functional>
 #include <cstdint>
+#include <memory>
+#include <Siv3D.hpp>
 
-enum class EventType
-{
-	eOnce,
-	eRepeat,
-};
+
+class Object;
+class EventBehav;
+class Enemy;
+class MyShip;
 
 class Event
 {
 public:
-
 	Event()
 		: mTriggerTime(0)
-		, mStartFunc([](Event*) {})
-		, mUpdateFunc([](Event*) {})
-		, mEndFunc([](Event*) {})
-		, mElapsedFrame(0)
-		, mType(EventType::eOnce)
+		, mElapsedTime(0)
 		, mEndFlag(false)
-	{
+		, mBehav(nullptr)
+	{}
 
-	}
+	~Event();
 
-	Event
-	(
-		const double triggerTime,
-		EventType type,
-		const std::function<void(Event *pE)>& startFunc,
-		const std::function<void(Event *pE)>& updateFunc,
-		const std::function<void(Event *pE)>& endFunc
-	);
+	//Event(const double& triggerTime, const EventBehav* const pBehav);
 
-	void setTriggerTime(const double& triggerTime);
+	void setTriggerTime(const double &triggerTime);
 
-	double getTriggerTime() const;
+	const double& getTriggerTime() const;
 
-	void setStartFunc(const std::function<void(Event* pE)>& startFunc);
+	void setBehav(Enemy& enemy, MyShip& myship, const Vec2& windowSize, std::shared_ptr<EventBehav> pBehav = nullptr);
 
-	void executeStartFunc();
+	void update(Enemy& enemy, MyShip& myship, const double& elapsedTime);
 
-	void setUpdateFunc(const std::function<void(Event* pE)>& updateFunc);
+	void draw() const;
 
-	void executeUpdateFunc();
+	bool checkHit(MyShip& myShip);
 
-	void setEndFunc(const std::function<void(Event* pE)>& endFunc);
-
-	void executeEndFunc();
-
-	void setEndFlag();
-
-	bool getEndFlag() const;
-
-	void setType(EventType type);
-
-	EventType getType() const;
-
-	uint64_t getElapsedFrame() const;
-
+	bool isEnded() const;
 
 private:
-	double							mTriggerTime;
-	uint64_t						mElapsedFrame;
-	std::function<void(Event* pE)>	mStartFunc;
-	std::function<void(Event* pE)>	mUpdateFunc;
-	std::function<void(Event* pE)>	mEndFunc;
-	EventType						mType;
-	bool							mEndFlag;
+	double mTriggerTime;
+	double mElapsedTime;
+	bool mEndFlag;
+	std::shared_ptr<EventBehav> mBehav;
 };
+

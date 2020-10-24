@@ -358,6 +358,60 @@ src/Object.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/Object.cpp.s
 .PHONY : src/Object.cpp.s
 
+src/Result.o: src/Result.cpp.o
+
+.PHONY : src/Result.o
+
+# target to build an object file
+src/Result.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/Result.cpp.o
+.PHONY : src/Result.cpp.o
+
+src/Result.i: src/Result.cpp.i
+
+.PHONY : src/Result.i
+
+# target to preprocess a source file
+src/Result.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/Result.cpp.i
+.PHONY : src/Result.cpp.i
+
+src/Result.s: src/Result.cpp.s
+
+.PHONY : src/Result.s
+
+# target to generate assembly for a file
+src/Result.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/Result.cpp.s
+.PHONY : src/Result.cpp.s
+
+src/SampleEB.o: src/SampleEB.cpp.o
+
+.PHONY : src/SampleEB.o
+
+# target to build an object file
+src/SampleEB.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/SampleEB.cpp.o
+.PHONY : src/SampleEB.cpp.o
+
+src/SampleEB.i: src/SampleEB.cpp.i
+
+.PHONY : src/SampleEB.i
+
+# target to preprocess a source file
+src/SampleEB.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/SampleEB.cpp.i
+.PHONY : src/SampleEB.cpp.i
+
+src/SampleEB.s: src/SampleEB.cpp.s
+
+.PHONY : src/SampleEB.s
+
+# target to generate assembly for a file
+src/SampleEB.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/App.dir/build.make CMakeFiles/App.dir/src/SampleEB.cpp.s
+.PHONY : src/SampleEB.cpp.s
+
 src/ScoreLoader.o: src/ScoreLoader.cpp.o
 
 .PHONY : src/ScoreLoader.o
@@ -445,6 +499,12 @@ help:
 	@echo "... src/Object.o"
 	@echo "... src/Object.i"
 	@echo "... src/Object.s"
+	@echo "... src/Result.o"
+	@echo "... src/Result.i"
+	@echo "... src/Result.s"
+	@echo "... src/SampleEB.o"
+	@echo "... src/SampleEB.i"
+	@echo "... src/SampleEB.s"
 	@echo "... src/ScoreLoader.o"
 	@echo "... src/ScoreLoader.i"
 	@echo "... src/ScoreLoader.s"

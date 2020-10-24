@@ -1,70 +1,14 @@
-#include "Game.hpp"
-#include "CommonConstant.hpp"
+// #include "Game.hpp"
+// #include "CommonConstant.hpp"
 
-enum BulletsName
-{
-	eOP,
-};
+// #include "SampleEB.hpp"
 
-void Game::BCSetup()
-{
-	bc.emplace(eOP, std::vector<Bullet>());
-}
-
-void Game::eventSetup()
-{
-	constexpr auto lmdSpinVec2 = [](const Vec2 &v, const double &angle) -> Vec2 
-	{
-		return Vec2(v.x * cos(angle) - v.y * sin(angle),
-					v.x * sin(angle) + v.y * cos(angle));
-	};
-	{
-		constexpr int OPNumOnce = 20;
-		constexpr double radius = 200;
-		constexpr double speed = 3;
-
-		auto &op = bc[eOP];
-
-		auto lmdStart = [&](Event *pE) {
-			const int rand = Random<int>(5);
-			for (int i = 0; i < OPNumOnce; ++i)
-			{
-				op.emplace_back();
-				op.back().setTexture(Texture(U"resources/Assets/Bullet_RectangleW.png"));
-				//op.back().setScale(Vec2(1.7, 1.7));
-				const double angle = 2 * M_PI / OPNumOnce * i + 90 / M_PI * rand;
-				op.back().setPos(enemy.getPos() + Vec2(cos(angle), sin(angle)) * radius);
-				op.back().setVel(Vec2(cos(angle), sin(angle)) * speed);
-				//op.back().setAcc(op.back().getVel() * 0.02);
-			}
-		};
-
-		auto lmdUpdate = [&](Event *pE) 
-		{
-			const auto lmdErase = [&](const Bullet &b) 
-			{
-				const Vec2 &pos = b.getPos();
-				return pos.x < -100 ||
-					   pos.x > windowSize.x + 100 ||
-					   pos.y < -200 ||
-					   pos.y > windowSize.y + 100;
-			};
-			op.erase(std::remove_if(op.begin(), op.end(), lmdErase), op.end());
-
-			if(op.size() <= 0)
-				pE->setEndFlag();
-		};
-
-		auto lmdEnd = [&](Event *pE) 
-		{
-			op.clear();
-		};
+// void Game::BCSetup()
+// {
+// 	bc.emplace(eOP, std::vector<Bullet>());
+// }
 
 
-		Event e(0, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
-		waitingEvents.push(e);
-		
-	}
 
 	// {
 	// 	constexpr int per = 4;
@@ -135,4 +79,4 @@ void Game::eventSetup()
 	// 	Event e(1.5, EventType::eOnce, lmdStart, lmdUpdate, lmdEnd);
 	// 	waitingEvents.push(e);
 	// }
-}
+//}

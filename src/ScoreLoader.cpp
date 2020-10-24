@@ -47,14 +47,14 @@ bool ScoreLoader::load(const char* fileName)
     std::reverse(score.begin(), score.end());
     ifs.close();
 
-    std::ofstream ofs("test.txt");
+    // std::ofstream ofs("test.txt");
 
-    for(auto& n : score)
-    {
-        ofs << n.first << " " << n.second << "\n";
-    }
+    // for(auto& n : score)
+    // {
+    //     ofs << n.first << " " << n.second << "\n";
+    // }
 
-    ofs.close();
+    // ofs.close();
 
     return true;
 }

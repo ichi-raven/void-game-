@@ -1,6 +1,8 @@
 #include "Game.hpp"
 #include "CommonConstant.hpp"
 
+#include "SampleEB.hpp"
+
 #include <cassert>
 
 void Game::init()
@@ -8,19 +10,41 @@ void Game::init()
 	Profiler::EnableAssetCreationWarning(false);
 	enemy.setPos(Vec2(windowSize.x / 2, windowSize.y / 3));
 	myShip.setPos(Vec2(windowSize.x / 2, windowSize.y / 5 * 4));
-	music.play();
+	if(!music.play())
+		Print << U"Error\n";
 	music.setVolume(0.2); //------------------------
 
 	assert(scoreLoader.load("resources/Score/score.dat"));
 
 	notes = scoreLoader.getNotes();
-
-	BCSetup();
+	//BCSetup();
 	eventSetup();
+
+	mProgressBar.setPos(0, 0);
+
+
+	//notes.clear();
+}
+
+void Game::eventSetup()
+{
+	for (const auto& n : notes)
+	{
+		waitingEvents.emplace_back();
+
+		switch (n.first)
+		{
+		default:
+			waitingEvents.back().setBehav(enemy, myShip, windowSize, std::make_shared<SampleEB>());
+			waitingEvents.back().setTriggerTime(n.second);
+			break;
+		}
+	}
 }
 
 void Game::update()
 {
+
 	checkInput();
 
 	eventHandle();
@@ -30,24 +54,34 @@ void Game::update()
 	myShip.update();
 	enemy.update();
 
-	for(auto& bVecPair : bc)
-		for(auto& b : bVecPair.second)
-		{
-			b.update();
-		}
+	//Print << activeEvents.size();
 
 	for (auto& ae : activeEvents)
-		ae.executeUpdateFunc();
+		ae.update(enemy, myShip, music.posSec());
+
+	mProgressBar.setSize((1 - music.posSec() / music.lengthSec()) * windowSize.x, 10);
+
+	if(myShip.isDead())
+	{
+		getData().endWithDead = true;
+		changeScene(U"Result");
+	}
+	
+	if(!music.isPlaying())//終了
+	{
+		getData().endWithDead = false;
+		changeScene(U"Result");
+	}
 }
 
 void Game::draw() const
 {
-	myShip.draw();
+	mProgressBar.draw();
+	myShip.draw(windowSize);
 	enemy.draw();
 
-	for (const auto& bVecPair : bc)
-		for (const auto& b : bVecPair.second)
-			b.draw();
+	for(auto& ae : activeEvents)
+		ae.draw();
 }
 
 void Game::checkInput()
@@ -73,55 +107,33 @@ void Game::checkInput()
 
 		myShip.setVel(vel);
 	}
-
-}
-
-
-void Game::eventHandle()
-{
-	while (
-			!notes.empty() 
-			&& 
-			notes.back().second - music.posSec() <= allowableErrorTime
-		  )
-	{
-		Print << notes.back().second;
-		activeEvents.push_back(waitingEvents.front());
-		notes.pop_back();
-		activeEvents.back().executeStartFunc();
-	}
-
-	auto itr = std::remove_if(activeEvents.begin(), activeEvents.end(),
-		[&](Event& e)
-		{
-			if (e.getEndFlag())
-			{
-				e.executeEndFunc();
-				return true;
-			}
-			return false;
-		});
-
-	activeEvents.erase(itr, activeEvents.end());
 }
 
 void Game::checkCollide()
 {
-	for(const auto& bVecPair : bc)
-		for(const auto& b : bVecPair.second)
-		{
-			//範囲制限による高速化、再考の余地あり
-				if(b.getPos().x < myShip.getPos().x - 100||
-					b.getPos().x > myShip.getPos().x + 100||
-					b.getPos().y < myShip.getPos().y - 100||
-					b.getPos().y > myShip.getPos().y + 100)
-					continue;
-			
-			//衝突時のことを考えてない
-			if(myShip.getPos().distanceFrom(b.getPos()) <= 10)
+	for(auto& ae : activeEvents)
+		ae.checkHit(myShip);
+}
+
+void Game::eventHandle()
+{
+	while (
+			!waitingEvents.empty() 
+			&& 
+			waitingEvents.back().getTriggerTime() - music.posSec() <= allowableErrorTime
+		  )
+	{
+		Print << waitingEvents.back().getTriggerTime();
+		activeEvents.emplace_back(std::move(waitingEvents.back()));
+		waitingEvents.pop_back();
+	}
+
+	activeEvents.erase(
+		std::remove_if(
+			activeEvents.begin(), activeEvents.end(),
+			[&](Event &e) 
 			{
-				Print << U"Hit";
-			}
-		}
-	
+				return e.isEnded();
+			}),
+		activeEvents.end());
 }

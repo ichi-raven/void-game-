@@ -13,7 +13,6 @@
 #include <vector>
 #include <queue>
 
-using BC = std::unordered_map<int, std::vector<Bullet>>;
 
 class Game : public SceneManager<String, GameParam>::Scene
 {
@@ -25,18 +24,14 @@ public:
 		, enemy()
 		, time(0)
 		, windowSize(Vec2(getData().windowWidth, getData().windowHeight))
-		, music(U"resources/Music/music.wav")//テスト音源
+		, music(U"resources/Music/Burst.mp3")//テスト音源
 	{
 		init();
 	}
 
 	void init();
 
-	//別ファイル
-	//-----------------
-	void BCSetup();
 	void eventSetup();
-	//-----------------
 
 	void eventHandle();
 
@@ -54,12 +49,13 @@ private:
 	const Font			font;
 	MyShip				myShip;
 	Enemy				enemy;
-	BC					bc;
 	std::vector<Event>  activeEvents;
-	std::queue<Event>	waitingEvents;
+	std::vector<Event>	waitingEvents;
 	const Audio			music;
 	double				time;
 	Timer				hitTimer;
 	ScoreLoader 		scoreLoader;
-	std::vector<Note> notes;
+	std::vector<Note> 	notes;
+
+	Rect mProgressBar;
 };

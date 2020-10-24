@@ -5,6 +5,7 @@
 #include "GameParam.hpp"
 #include "Title.hpp"
 #include "Game.hpp"
+#include "Result.hpp"
 
 using App = SceneManager<String, GameParam>;
 
@@ -14,14 +15,15 @@ void Main()
 
 	app.add<Title>(U"Title");
 	app.add<Game>(U"Game");
+	app.add<Result>(U"Result");
 
 	app.get()->windowWidth  = Window::ClientWidth();
 	app.get()->windowHeight = Window::ClientHeight();
+	app.get()->endWithDead = false;
 
 	while (System::Update())
 		if (!app.update())
 			break;
-
 }
 
 //
