@@ -1,2 +1,2 @@
 # void-game-
-虚無 written in OpenSiv3D on Linux
+Simple Bullet-Hell Shooting Game using OpenSiv3D(currently under construction)
